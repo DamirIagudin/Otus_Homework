@@ -1,4 +1,4 @@
-//Домашнее задание к уроку №9 "Протоколы передачи данных - часть 2"
+//Домашнее задание №3 п.2 к уроку №9 "Протоколы передачи данных - часть 2"
 
 #include "Arduino.h"
 #include "EspMQTTClient.h" /* https://github.com/plapointe6/EspMQTTClient */
