@@ -8,54 +8,70 @@ from datetime import datetime  # for date
 
 ### machine and logic
 class Machine():
-    def __init__(self, mqtt_client, progress, temperature=21, light=True):
+    def __init__(self, mqtt_client, koordinates, commands="pause"):
         self.mqtt_client = mqtt_client
         self.topic_data = "data/state"
-        self.topic_change_temp = "command/change_temp"
-        self.topic_change_light = "command/change_light"
-        self.temperatureValue = temperature
-        self.lightValue = light
-        self.progress = progress
-        self.course = 'forward_X'
+        self.topic_commands = "commands"
+        self.commands = commands  # команды: 1 - работа, 2 - пауза, 0 - возврат на базу
+        self.koordinates = koordinates  # текущие координаты
+        self.course = 'forward_X'  # направление движения
+        self.state = ''  # текущее состояние
 
-        self.mqtt_client.subscribe(self.topic_change_temp)
-        self.mqtt_client.message_callback_add(self.topic_change_temp, self.command_change_temperature)
+        self.mqtt_client.subscribe(self.topic_commands)
+        self.mqtt_client.message_callback_add(self.topic_commands, self.reaction_command)
 
-        self.mqtt_client.subscribe(self.topic_change_light)
-        self.mqtt_client.message_callback_add(self.topic_change_light, self.command_change_light)
-
-    def command_change_temperature(self, client, userdata, message):
-        print("command:change temp, value: %s" % message.payload)
-        try:
-            self.temperatureValue = int(message.payload)
-        except:
-            pass
-
-    def command_change_light(self, client, userdata, message):
-        print("command:change light, value: %s" % message.payload)
-        try:
-            self.lightValue = bool(message.payload)
-        except:
-            pass
-
+    def reaction_command(self, client, userdata, message):
+        self.input_list = list(str(message.payload))
+        del self.input_list[0:2]
+        del self.input_list[-1]
+        if self.input_list == ['0']:
+            self.commands = "on_base"
+            print("commands:", self.commands)
+        elif self.input_list == ['1']:
+            self.commands = "work"
+            print("commands:", self.commands)
+        elif self.input_list == ['2']:
+            self.commands = "pause"
+            print("commands:", self.commands)
+        else:
+            print("Incorrect command")
 
     def progress_upd(self):
+        if self.commands == "work":  # РАБОТА
+            match self.course:
+                case "forward_X":  # движение вперед по оси Х
+                    self.koordinates['X'] += 1
+                    if self.koordinates['X'] >= 10:
+                        self.course = "right_Y"
+                    self.state = 'WORK_forward_X'
+                case "right_Y":  # поворот направо по оси Y
+                    self.koordinates['Y'] += 1
+                    self.course = "backward_X"
+                    self.state = 'WORK_right_Y'
+                case "backward_X":  # движение назад по оси X
+                    self.koordinates['X'] -= 1
+                    if self.koordinates['X'] <= 0:
+                        self.course = "left_Y"
+                    self.state = 'WORK_backward_X'
+                case "left_Y":  # поворот на налево по оси Y
+                    self.koordinates['Y'] += 1
+                    self.course = "forward_X"
+                    self.state = 'WORK_left_Y'
 
-        match self.course:
-            case "forward_X":
-                self.progress['X'] += 1
-                if self.progress['X'] >= 10:
-                    self.course = "right_Y"
-            case "right_Y":
-                self.progress['Y'] += 1
-                self.course = "backward_X"
-            case "backward_X":
-                self.progress['X'] -= 1
-                if self.progress['X'] <= 0:
-                    self.course = "left_Y"
-            case "left_Y":
-                self.progress['Y'] += 1
-                self.course = "forward_X"
+        elif self.commands == "on_base":  # ДВИЖЕНИЕ НА БАЗУ
+            self.course = "forward_X"
+            if self.koordinates['Y'] > 0:
+                self.koordinates['Y'] -= 1
+                self.state = 'move_TO_BASE'
+            elif self.koordinates['X'] > 0:
+                self.koordinates['X'] -= 1
+                self.state = 'move_TO_BASE'
+            else:
+                self.state = 'ON_BASE'
+
+        elif self.commands == "pause":  # ПАУЗА
+            self.state = 'PAUSE'
+
         try:
             f = open('./save_state.txt', 'r')
             file = f.read()
@@ -64,14 +80,14 @@ class Machine():
         except:
             config = {}
         f = open('./save_state.txt', 'w')
-        config["progress"] = self.progress
-        config["course"] = self.course
+        config["koordinates"] = self.koordinates
+        config["state"] = self.state
         config = json.dumps(config)
         f.write('%s' % config)
         f.close()
 
     def get_data(self):
-        data = json.dumps({"progress": self.progress, "course": self.course, "time": str(datetime.now())})
+        data = json.dumps({"koordinates": self.koordinates, "state": self.state, "time": str(datetime.now())})
         return data
 
 
@@ -110,7 +126,6 @@ def run(client, host="127.0.0.1", port=1883):
     client.loop_start()
 
 
-# function for publish data
 
 # body of emulator
 def main():
@@ -118,7 +133,7 @@ def main():
     mqtt_client = init("client_id")
     run(mqtt_client)
     # read config
-    progress = {'X': 0, 'Y': 0}
+    koordinates = {'X': 0, 'Y': 0}
     argv = sys.argv;
     try:
         path_to_config = argv[1] if len(argv) > 1 else "./save_state.txt"
@@ -126,13 +141,13 @@ def main():
         file = f.read()
         config = json.loads(file)
         f.close()
-        progress = dict(config["progress"])
+        koordinates = dict(config["koordinates"])
         print("read config %s" % config)
     except:
         pass
 
     # init machine
-    machine = Machine(mqtt_client, progress)
+    machine = Machine(mqtt_client, koordinates)
 
     while True:
         time.sleep(2)
