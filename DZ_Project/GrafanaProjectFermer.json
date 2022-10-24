@@ -1,0 +1,1183 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 3,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "rightech-ric-datasource",
+        "uid": "JFfb3Wn4z"
+      },
+      "description": "температура внутри грузовика и склада",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 20,
+            "axisSoftMin": -1,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "temperature_inside {name=\"Температура внутри\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "температура в кузове грузовика"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "temperature_inside {name=\"Температура внутри\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "температура внутри склада"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "arguments": [
+            "temperature_inside"
+          ],
+          "columns": [],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "objects": [
+            "6349b102ed52e500105cc2ad"
+          ],
+          "refId": "Авто",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "arguments": [
+            "temperature_inside"
+          ],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "hide": false,
+          "objects": [
+            "6349b3d202020500107efcae"
+          ],
+          "refId": "A"
+        }
+      ],
+      "title": "Температуры",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "rightech-ric-datasource",
+        "uid": "JFfb3Wn4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "argon {name=\"Аргон\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Аргон"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "azot {name=\"Азот\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Азот"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gelii {name=\"Гелий\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Гелий"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vodorod {name=\"Водород\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-orange",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Водород"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "co2 {name=\"Углекислый газ\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Углекислый газ"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#ccccdb",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "co {name=\"Угарный газ\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Угарный газ"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "o2 {name=\"Кислород\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Кислород"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {
+          "valueSize": 15
+        }
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "arguments": [
+            "argon",
+            "azot",
+            "gelii",
+            "vodorod",
+            "co2",
+            "co",
+            "o2"
+          ],
+          "columns": [],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "objects": [
+            "6349b102ed52e500105cc2ad"
+          ],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Грузовик. Выделение газов",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "rightech-ric-datasource",
+        "uid": "JFfb3Wn4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "argon {name=\"Аргон\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Аргон"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "azot {name=\"Азот\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Азот"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gelii {name=\"Гелий\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Гелий"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vodorod {name=\"Водород\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-orange",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Водород"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "co2 {name=\"Углекислый газ\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Углекислый газ"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#ccccdb",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "co {name=\"Угарный газ\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Угарный газ"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "o2 {name=\"Кислород\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Кислород"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "id": 12,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {
+          "valueSize": 15
+        }
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "arguments": [
+            "argon",
+            "azot",
+            "gelii",
+            "vodorod",
+            "co2",
+            "co",
+            "o2"
+          ],
+          "columns": [],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "objects": [
+            "6349b3d202020500107efcae"
+          ],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Склад. Выделение газов",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "rightech-ric-datasource",
+        "uid": "JFfb3Wn4z"
+      },
+      "description": "влажность внутри грузовика и склада",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 90,
+            "axisSoftMin": 10,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "humidity_inside {name=\"Влажность внутри\", object=\"Грузовик. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-orange",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "влажность в кузове грузовика"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "humidity_inside {name=\"Влажность внутри\", object=\"Склад. \"Фермерское хозяйство\"\"}"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "влажность на складе"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "arguments": [
+            "humidity_inside"
+          ],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "key": "Q-fca692c5-6124-47ef-ab0e-889bdaab06ff-0",
+          "objects": [
+            "6349b102ed52e500105cc2ad"
+          ],
+          "refId": "Температура в грузовике"
+        },
+        {
+          "arguments": [
+            "humidity_inside"
+          ],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "hide": false,
+          "key": "Q-de33a638-7975-4fe0-acc1-81844b1cb799-1",
+          "objects": [
+            "6349b3d202020500107efcae"
+          ],
+          "refId": "B"
+        }
+      ],
+      "title": "Влажность",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "rightech-ric-datasource",
+        "uid": "JFfb3Wn4z"
+      },
+      "description": " скорость грузовика",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 12,
+        "y": 10
+      },
+      "id": 5,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "arguments": [
+            "speed"
+          ],
+          "columns": [],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "objects": [
+            "6349b102ed52e500105cc2ad"
+          ],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Скорость",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "rightech-ric-datasource",
+        "uid": "JFfb3Wn4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [
+            {
+              "options": {
+                "На склад": {
+                  "index": 0,
+                  "text": "Загружен, движется на склад"
+                },
+                "На ферму": {
+                  "index": 1,
+                  "text": "Разгрузился, движется на ферму"
+                },
+                "Стоянка-полный": {
+                  "index": 2,
+                  "text": "Остановился загруженный"
+                },
+                "Стоянка-пустой": {
+                  "index": 3,
+                  "text": "Остановился пустой"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 7,
+        "x": 17,
+        "y": 10
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^status_car \\{name=\"Статус грузовика\", object=\"Грузовик\\. \"Фермерское хозяйство\"\"\\}$/",
+          "values": false
+        },
+        "text": {
+          "valueSize": 16
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "arguments": [
+            "status_car"
+          ],
+          "columns": [],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "objects": [
+            "6349b102ed52e500105cc2ad"
+          ],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Статус грузовика",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "rightech-ric-datasource",
+        "uid": "JFfb3Wn4z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "fillOpacity": 89,
+            "lineWidth": 1,
+            "spanNulls": false
+          },
+          "displayName": "Статус",
+          "mappings": [
+            {
+              "options": {
+                "На склад": {
+                  "color": "light-red",
+                  "index": 0
+                },
+                "На ферму": {
+                  "color": "semi-dark-green",
+                  "index": 1
+                },
+                "Стоянка-полный": {
+                  "color": "light-blue",
+                  "index": 2
+                },
+                "Стоянка-пустой": {
+                  "color": "light-yellow",
+                  "index": 3
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 7,
+        "x": 17,
+        "y": 12
+      },
+      "id": 11,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "mergeValues": true,
+        "rowHeight": 0.05,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "arguments": [
+            "status_car"
+          ],
+          "columns": [],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "objects": [
+            "6349b102ed52e500105cc2ad"
+          ],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Статус грузовика. График",
+      "type": "state-timeline"
+    },
+    {
+      "datasource": {
+        "type": "rightech-ric-datasource",
+        "uid": "JFfb3Wn4z"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "false": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "НЕТ СВЯЗИ"
+                },
+                "true": {
+                  "color": "semi-dark-green",
+                  "index": 0,
+                  "text": "онлайн"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 5,
+        "x": 12,
+        "y": 18
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^online \\{name=\"online\", object=\"Грузовик\\. \"Фермерское хозяйство\"\"\\}$/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.1.5",
+      "targets": [
+        {
+          "arguments": [
+            "online"
+          ],
+          "columns": [],
+          "datasource": {
+            "type": "rightech-ric-datasource",
+            "uid": "JFfb3Wn4z"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "objects": [
+            "6349b102ed52e500105cc2ad"
+          ],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "https://jsonplaceholder.typicode.com/users",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Связь с объектом",
+      "type": "stat"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Фермерское хозяйство",
+  "uid": "RnRuZRHVz",
+  "version": 34,
+  "weekStart": ""
+}
