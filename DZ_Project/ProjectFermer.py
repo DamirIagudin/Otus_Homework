@@ -5,18 +5,17 @@ import random
 import json
 
 state_temp = "heating"  # состояние для эмуляции работы кондиционера
-truck_temp = 3          # начальная температура в кузове грузовика
-state_truck = 0         # переменная для эмуляции состояния грузовика
-i_truck = 0             # служебная переменная
-massa_truck = 0         # масса продукции в грузовике
-speed_truck = 0         # скорость грузовика
-hard_break = False      # признак резкого торможения
-vibration = 0           # уровень вибрации грузовика %
+truck_temp = 3  # начальная температура в кузове грузовика
+state_truck = 0  # переменная для эмуляции состояния грузовика
+i_truck = 0  # служебная переменная
+massa_truck = 0  # масса продукции в грузовике
+speed_truck = 0  # скорость грузовика
+hard_break = False  # признак резкого торможения
+vibration = 0  # уровень вибрации грузовика %
 pos = {"lat": 56.17, "lon": 43.88}  # координаты грузовика
 state_temp_storage = "heating"  # состояние для эмуляции работы кондиционера склада
-storage_temp = 8.0          # начальная температура в складе
-COOL = False
-GATE = False
+storage_temp = 8.0  # начальная температура в складе
+
 
 # ---------------MQTT-КЛИЕНТ. ЭМУЛЯТОР ГРУЗОВИКА-----------------
 # Ф-ция подтверждения подключения от сервера
@@ -34,7 +33,7 @@ def truck_on_message(client, userdata, message):
         is_cool = True
     elif str(message.payload) == "b'0'":
         is_cool = False
-    client.publish("base/state/is_cool", is_cool)     # состояние кондиционера
+    client.publish("base/state/is_cool", is_cool)  # состояние кондиционера
 
 
 # подключение к модели "Грузовик. "Фермерское хозяйство"" на dev.rightech.io
@@ -73,7 +72,6 @@ def storage_on_message(client, userdata, message):
         client.publish("base/state/is_gate", is_gate)  # состояние шлагбаума
 
 
-
 # подключение к брокеру
 client_storage = mqtt.Client(
     client_id="mqtt-damirjud-2fb71t")  # подключаемся к модели "Склад. "Фермерское хозяйство"на dev.rightech.io
@@ -83,7 +81,6 @@ client_storage.on_message = storage_on_message
 client_storage.connect("dev.rightech.io", 1883, 20)
 client_storage.loop_start()
 
-
 # ------------------ОСНОВНОЙ ЦИКЛ ПРОГРАММЫ--------------
 while True:
     time.sleep(2)
@@ -91,30 +88,35 @@ while True:
     # ---------------------ГРУЗОВИК-----------------------
 
     # эмуляция параметров грузовика внутри кузова - random
-    client_truck.publish("base/state/humidity_inside", random.random() * (45 - 42) + 42)  # влажность
-    client_truck.publish("base/state/argon", random.random() * (1.3 - 1.2) + 1.2)  # аргон
-    client_truck.publish("base/state/azot", random.random() * (76 - 74) + 74)  # азот
-    client_truck.publish("base/state/gelii", random.random())  # гелий
-    client_truck.publish("base/state/vodorod", random.random())  # водород
-    client_truck.publish("base/state/co2", random.random())  # углекислый газ
-    client_truck.publish("base/state/co", random.random())  # угарный газ
-    client_truck.publish("base/state/o2", random.random() * (24 - 21) + 21)  # кислород
+    truck_humidity_inside = random.random() * (45 - 42) + 42  # влажность
+    truck_argon = random.random() * (1.3 - 1.2) + 1.2  # аргон
+    truck_azot = random.random() * (76 - 74) + 74  # азот
+    truck_gelii = random.random()  # гелий
+    truck_vodorod = random.random()  # водород
+    truck_co2 = random.random()  # углекислый газ
+    truck_co = random.random()  # угарный газ
+    truck_o2 = random.random() * (24 - 21) + 21  # кислород
 
     # эмуляция температуры внутри кузова
-    match state_temp :
-        case "heating" :  # повышение температуры
+    match state_temp:
+        case "heating":  # повышение температуры
             truck_temp += 1
             if truck_temp > 10:
                 state_temp = "cooling"
-        case "cooling" :  # понижение температуры
+        case "cooling":  # понижение температуры
             truck_temp -= 1
             if truck_temp < 5:
                 state_temp = "heating"
-    client_truck.publish("base/state/temperature_inside", truck_temp)
+
+    # запаковка данных в JSON для отправки одним пакетом
+    data = json.dumps({"humidity": truck_humidity_inside, "argon": truck_argon, "azot": truck_azot,
+                       "gelii": truck_gelii, "vodorod": truck_vodorod, "co2": truck_co2,
+                       "co": truck_co, "o2": truck_o2, "temperature_inside": truck_temp})
+    client_truck.publish("base/state/par_inside", data)
 
     # эмуляция статуса грузовика
     match state_truck:
-        case 0:                 # пустой на ферме, остановлен
+        case 0:  # пустой на ферме, остановлен
             massa_truck = 0
             speed_truck = 0
             vibration = 0
@@ -123,7 +125,7 @@ while True:
                 i_truck = 0
                 massa_truck = 1500
                 state_truck = 1
-        case 1:                 # загружается на ферме, остановлен
+        case 1:  # загружается на ферме, остановлен
             massa_truck += 20
             speed_truck = 0
             vibration = 0
@@ -132,7 +134,7 @@ while True:
                 i_truck = 0
                 speed_truck = 40
                 state_truck = 2
-        case 2:                 # загружен, движется на склад
+        case 2:  # загружен, движется на склад
             speed_truck = random.random() * (50 - 40) + 40
             pos["lat"] -= 0.005
             vibration = 30
@@ -141,7 +143,7 @@ while True:
             if i_truck > 25:
                 i_truck = 0
                 state_truck = 3
-        case 3:                 # остановлен, разгружается на складе
+        case 3:  # остановлен, разгружается на складе
             speed_truck = 0
             massa_truck -= 200
             vibration = 0
@@ -149,10 +151,10 @@ while True:
                 i_truck = 0
                 massa_truck = 0
                 state_truck = 4
-        case 4:                 # пустой возвращается на склад, "водитель-лихач"
+        case 4:  # пустой возвращается на склад, "водитель-лихач"
             i_truck += 1
             pos["lat"] += 0.005
-            if i_truck < 10:                             # эмуляция сильной тряски и повышенной скорости
+            if i_truck < 10:  # эмуляция сильной тряски и повышенной скорости
                 vibration = 50
                 speed_truck = random.random() * (90 - 80) + 80
             elif (i_truck > 14) & (i_truck < 20):
@@ -178,16 +180,16 @@ while True:
     # ---------------------СКЛАД-----------------------
 
     # эмуляция параметров внутри склада - random
-    client_storage.publish("base/state/humidity_inside", random.random() * (55 - 52) + 52)  # влажность
-    client_storage.publish("base/state/argon", random.random() * (1.3 - 1.2) + 1.2)  # аргон
-    client_storage.publish("base/state/azot", random.random() * (76 - 74) + 74)  # азот
-    client_storage.publish("base/state/gelii", random.random())  # гелий
-    client_storage.publish("base/state/vodorod", random.random())  # водород
-    client_storage.publish("base/state/co2", random.random())  # углекислый газ
-    client_storage.publish("base/state/co", random.random())  # угарный газ
-    client_storage.publish("base/state/o2", random.random() * (24 - 21) + 21)  # кислород
-    client_storage.publish("base/state/k_air", random.random() * (2 - 1.3) + 1.3)  # кратность воздухообмена
-    client_storage.publish("base/state/massa", random.randrange(15000, 20000))  # масса продукции на складе
+    storage_humidity_inside = random.random() * (55 - 52) + 52  # влажность
+    storage_argon = random.random() * (1.3 - 1.2) + 1.2  # аргон
+    storage_azot = random.random() * (76 - 74) + 74  # азот
+    storage_gelii = random.random()  # гелий
+    storage_vodorod = random.random()  # водород
+    storage_co2 = random.random()  # углекислый газ
+    storage_co = random.random()  # угарный газ
+    storage_o2 = random.random() * (24 - 21) + 21  # кислород
+    storage_k_air = random.random() * (2 - 1.3) + 1.3  # кратность воздухообмена
+    storage_massa = random.randrange(15000, 20000)  # масса продукции на складе
 
     # эмуляция температуры внутри склада
     match state_temp_storage:
@@ -199,7 +201,10 @@ while True:
             storage_temp -= 0.5
             if storage_temp < 5:
                 state_temp_storage = "heating"
-    client_storage.publish("base/state/temperature_inside", storage_temp)
 
-
-
+    # запаковка данных в JSON для отправки одним пакетом
+    data = json.dumps({"humidity": storage_humidity_inside, "argon": storage_argon, "azot": storage_azot,
+                       "gelii": storage_gelii, "vodorod": storage_vodorod, "co2": storage_co2,
+                       "co": storage_co, "o2": storage_o2, "k_air": storage_k_air,
+                       "massa": storage_massa, "temperature_inside": storage_temp})
+    client_storage.publish("base/state/par_inside", data)
